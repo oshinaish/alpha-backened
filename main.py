@@ -24,10 +24,13 @@ async def upload_pdf(file: UploadFile = File(...)):
         for page in reader.pages:
             text = page.extract_text()
             if text:
-                lines.extend(line.strip() for line in text.splitlines() if line.strip())
+                for line in text.splitlines():
+                    # Match lines with transaction info (e.g., "2 Apr 2025 ... Debit ... Credit ... Balance")
+                    if re.match(r"\d{1,2} \w+ 2025\s+\d{1,2} \w+ 2025", line) and any(keyword in line for keyword in ["DEBIT", "CREDIT", "TRANSFER", "IMPS", "NEFT"]):
+                        lines.append(line.strip())
 
         if not lines:
-            return {"status": "error", "message": "No text found in PDF."}
+            return {"status": "error", "message": "No transactions found in PDF."}
 
         return {
             "status": "success",
