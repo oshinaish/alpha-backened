@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from PyPDF2 import PdfReader
 import json
 import os
+import re
 
 app = FastAPI()
 
