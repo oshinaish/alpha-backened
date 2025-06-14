@@ -6,6 +6,11 @@ import os
 import re
 from datetime import datetime
 
+@app.get("/")
+async def read_root():
+    return {"message": "BahiKhata Backend API is running!"}
+
+
 app = FastAPI()
 
 app.add_middleware(
